@@ -16,7 +16,7 @@ enum ToastificationType {
 mixin BuiltInToastWidget on Widget {
   ToastificationType get type;
 
-  MaterialColor buildColor(BuildContext context);
+  Color buildColor(BuildContext context);
 
   IconData buildIcon(BuildContext context);
 

@@ -15,6 +15,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      builder: (context,widget){
+        Toastification().setThemeColors(ThemeColors(
+            light: const ColorTypes(
+                info: Colors.blue,
+                warning: Colors.amber,
+                succeed: Colors.green,
+                failure: Colors.red),
+            dark: ColorTypes(
+                info: Colors.blue.shade900,
+                warning: Colors.amber.shade900,
+                succeed: Colors.green.shade900,
+                failure: Colors.red.shade900)));
+        return widget!;
+      },
       home: const Home(),
     );
   }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:toastification/src/core/toastification.dart';
+import 'package:toastification/src/helper/toast_helper.dart';
 import 'package:toastification/src/widget/built_in/built_in.dart';
 
 class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
@@ -7,8 +9,6 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
     required this.type,
     required this.title,
     this.description,
-    this.backgroundColor,
-    this.foregroundColor,
     this.icon,
     this.brightness,
     this.padding,
@@ -29,9 +29,6 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
 
   final TextDirection textDirection;
 
-  final MaterialColor? backgroundColor;
-  final Color? foregroundColor;
-
   final Brightness? brightness;
 
   final EdgeInsetsGeometry? padding;
@@ -45,16 +42,17 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
   final bool? showCloseButton;
 
   @override
-  MaterialColor buildColor(BuildContext context) {
+  @override
+  Color buildColor(BuildContext context) {
     switch (type) {
       case ToastificationType.info:
-        return Colors.blue;
+        return Toastification().themeColors!.getColor(brightness!)!.info;
       case ToastificationType.warning:
-        return Colors.amber;
+        return Toastification().themeColors!.getColor(brightness!)!.warning;
       case ToastificationType.success:
-        return Colors.green;
+        return Toastification().themeColors!.getColor(brightness!)!.succeed;
       case ToastificationType.failed:
-        return Colors.red;
+        return Toastification().themeColors!.getColor(brightness!)!.failure;
     }
   }
 
@@ -82,8 +80,8 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
   Widget build(BuildContext context) {
     final defaultTheme = Theme.of(context);
 
-    //final foreground = foregroundColor ?? defaultTheme.primaryIconTheme.color;
-    final background = backgroundColor ?? buildColor(context);
+    final foreground = defaultTheme.primaryIconTheme.color;
+    final background = buildColor(context);
 
     final showCloseButton = this.showCloseButton ?? true;
 
@@ -152,7 +150,7 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
   }
 
   Widget _buildContent(ThemeData defaultTheme) {
-    final foreground = foregroundColor ?? defaultTheme.primaryIconTheme.color;
+    final foreground = defaultTheme.primaryIconTheme.color;
 
     Widget content = Text(
       title,

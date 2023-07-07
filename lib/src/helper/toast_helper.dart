@@ -13,25 +13,45 @@ class ToastHelper {
     double scale = (newEnd - newStart) / (originalEnd - originalStart);
     return (newStart + ((value - originalStart) * scale));
   }
+}
 
-  static MaterialColor createMaterialColor(Color color) {
-    List strengths = <double>[.05];
-    Map<int, Color> swatch = {};
-    final int r = color.red, g = color.green, b = color.blue;
+class ColorTypes {
+  final Color info;
+  final Color warning;
+  final Color failure;
+  final Color succeed;
 
-    for (int i = 1; i < 10; i++) {
-      strengths.add(0.1 * i);
-    }
-    for (var strength in strengths) {
-      final double ds = 0.5 - strength;
-      swatch[(strength * 1000).round()] = Color.fromRGBO(
-        r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-        g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-        b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-        1,
-      );
-    }
+  const ColorTypes(
+      {required this.info,
+      required this.warning,
+      required this.failure,
+      required this.succeed});
+}
 
-    return MaterialColor(color.value, swatch);
+class ThemeColors {
+  ColorTypes? _light;
+  ColorTypes? _dark;
+
+  ThemeColors({ColorTypes? light, ColorTypes? dark}) {
+    _light = light;
+    _dark = dark;
+  }
+
+  ColorTypes? get light => _light;
+
+  set light(ColorTypes? value) {
+    _light = value;
+  }
+
+  ColorTypes? get dark => _dark;
+
+  set dark(ColorTypes? value) {
+    _dark = value;
+  }
+}
+
+extension ThemeColorsExtensions on ThemeColors? {
+  ColorTypes? getColor(Brightness brightness) {
+    return brightness == Brightness.dark ? this?.dark : this?.light;
   }
 }

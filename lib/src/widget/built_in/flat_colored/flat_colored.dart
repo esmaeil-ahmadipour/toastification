@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toastification/src/widget/built_in/built_in.dart';
+import 'package:toastification/toastification.dart';
 
 class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
   const FlatColoredToastWidget({
@@ -7,8 +7,6 @@ class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
     required this.type,
     required this.title,
     this.description,
-    this.backgroundColor,
-    this.foregroundColor,
     this.icon,
     this.brightness,
     this.padding,
@@ -28,9 +26,6 @@ class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
   final Widget? icon;
   final TextDirection textDirection;
 
-  final MaterialColor? backgroundColor;
-  final Color? foregroundColor;
-
   final Brightness? brightness;
 
   final EdgeInsetsGeometry? padding;
@@ -44,16 +39,16 @@ class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
   final bool? showCloseButton;
 
   @override
-  MaterialColor buildColor(BuildContext context) {
+  Color buildColor(BuildContext context) {
     switch (type) {
       case ToastificationType.info:
-        return Colors.blue;
+        return Toastification().themeColors!.getColor(brightness!)!.info;
       case ToastificationType.warning:
-        return Colors.amber;
+        return Toastification().themeColors!.getColor(brightness!)!.warning;
       case ToastificationType.success:
-        return Colors.green;
+        return Toastification().themeColors!.getColor(brightness!)!.succeed;
       case ToastificationType.failed:
-        return Colors.red;
+        return Toastification().themeColors!.getColor(brightness!)!.failure;
     }
   }
 
@@ -80,8 +75,8 @@ class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
   Widget build(BuildContext context) {
     final defaultTheme = Theme.of(context);
 
-    //final foreground = foregroundColor ?? defaultTheme.colorScheme.outline;
-    final background = backgroundColor ?? buildColor(context);
+    final foreground = defaultTheme.colorScheme.outline;
+    final background = buildColor(context);
 
     final showCloseButton = this.showCloseButton ?? true;
 
@@ -92,9 +87,9 @@ class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
       child: Material(
         shape: RoundedRectangleBorder(
           borderRadius: borderRadius,
-          side: BorderSide(color: background.shade300, width: 1.5),
+          side: BorderSide(color: background.withOpacity(0.8), width: 1.5),
         ),
-        color: background.shade100,
+        color: background.withOpacity(0.5),
         elevation: elevation ?? 0.0,
         child: Padding(
           padding: padding ?? const EdgeInsets.all(12),

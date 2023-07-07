@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:toastification/src/core/toastification_config.dart';
 import 'package:toastification/src/core/toastification_item.dart';
 import 'package:toastification/src/widget/built_in/built_in.dart';
@@ -132,8 +132,6 @@ class ToastificationManager {
           title: title,
           description: description,
           icon: icon,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
           brightness: brightness,
           padding: padding,
           margin: margin,
@@ -331,7 +329,8 @@ class ToastificationManager {
     return item.animationDuration ?? config.animationDuration;
   }
 }
-class StyleBuilder extends StatelessWidget with BuiltInToastWidget{
+
+class StyleBuilder extends StatelessWidget with BuiltInToastWidget {
   const StyleBuilder({Key? key}) : super(key: key);
 
   @override
@@ -346,7 +345,7 @@ class StyleBuilder extends StatelessWidget with BuiltInToastWidget{
   }
 
   @override
-  MaterialColor buildColor(BuildContext context) {
+  Color buildColor(BuildContext context) {
     // TODO: implement buildColor
     throw UnimplementedError();
   }

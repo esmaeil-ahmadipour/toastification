@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
@@ -179,7 +178,7 @@ class BuiltInWidgetBuilder extends StatelessWidget {
 
     final toastContent = buildToast(context);
 
-    final foreground = foregroundColor ?? defaultTheme.primaryIconTheme.color;
+    final foreground = defaultTheme.primaryIconTheme.color;
     final background = toastContent.buildColor(context);
 
     return ToastificationBuiltInContainer(
@@ -201,8 +200,6 @@ class BuiltInWidgetBuilder extends StatelessWidget {
 
     final style = this.style ?? ToastificationStyle.fillColored;
 
-    final backgroundColor = buildMaterialColor(this.backgroundColor);
-
     final onCloseTap = buildOnCloseTap();
 
     switch (style) {
@@ -212,8 +209,6 @@ class BuiltInWidgetBuilder extends StatelessWidget {
           textDirection: item.textDirection,
           title: title,
           description: description,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
           icon: icon,
           brightness: brightness,
           padding: padding,
@@ -228,8 +223,6 @@ class BuiltInWidgetBuilder extends StatelessWidget {
           type: type,
           title: title,
           description: description,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
           icon: icon,
           brightness: brightness,
           padding: padding,
@@ -244,8 +237,6 @@ class BuiltInWidgetBuilder extends StatelessWidget {
           type: type,
           title: title,
           description: description,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
           icon: icon,
           brightness: brightness,
           padding: padding,
@@ -262,16 +253,6 @@ class BuiltInWidgetBuilder extends StatelessWidget {
         () {
           Toastification().dismiss(item);
         };
-  }
-
-  MaterialColor? buildMaterialColor(Color? backgroundColor) {
-    if (backgroundColor == null) return null;
-
-    final findInMaterialColors = Colors.primaries
-        .firstWhereOrNull((element) => element.shade500 == backgroundColor);
-
-    return findInMaterialColors ??
-        ToastHelper.createMaterialColor(backgroundColor);
   }
 }
 

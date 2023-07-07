@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:toastification/src/core/toastification_config.dart';
 import 'package:toastification/src/core/toastification_item.dart';
 import 'package:toastification/src/core/toastification_manager.dart';
+import 'package:toastification/src/helper/toast_helper.dart';
 import 'package:toastification/src/widget/built_in/built_in.dart';
 import 'package:toastification/src/widget/built_in/built_in_builder.dart';
 
@@ -81,6 +82,23 @@ class Toastification {
   factory Toastification() => _instance;
 
   final Map<Alignment, ToastificationManager> _managers = {};
+  ThemeColors? _themeColors = ThemeColors(
+      light: const ColorTypes(
+          info: Colors.blue,
+          warning: Colors.amber,
+          succeed: Colors.green,
+          failure: Colors.red),
+      dark:  ColorTypes(
+          info: Colors.blue.shade900,
+          warning: Colors.amber.shade900,
+          succeed: Colors.green.shade900,
+          failure: Colors.red.shade900),);
+
+  ThemeColors? get themeColors => _themeColors;
+
+  void setThemeColors(ThemeColors value) {
+    _themeColors = value;
+  }
 
   /// the default configuration for the toastification
   ///
@@ -213,8 +231,6 @@ class Toastification {
     Duration? animationDuration,
     String? description,
     Widget? icon,
-    Color? backgroundColor,
-    Color? foregroundColor,
     Brightness? brightness,
     EdgeInsetsGeometry? padding,
     EdgeInsetsGeometry? margin,
@@ -240,9 +256,7 @@ class Toastification {
           title: title,
           description: description,
           icon: icon,
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          brightness: brightness,
+          brightness: Theme.of(ctx).brightness,
           padding: padding,
           margin: margin,
           borderRadius: borderRadius,
