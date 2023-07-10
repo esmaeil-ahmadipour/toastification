@@ -7,8 +7,8 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
   const FilledToastWidget({
     super.key,
     required this.type,
+    this.textStyle,
     required this.title,
-    this.description,
     this.icon,
     this.brightness,
     this.padding,
@@ -22,8 +22,10 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
   @override
   final ToastificationType type;
 
+  @override
+  final TextStyle? textStyle;
+
   final String title;
-  final String? description;
 
   final Widget? icon;
 
@@ -41,7 +43,6 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
 
   final bool? showCloseButton;
 
-  @override
   @override
   Color buildColor(BuildContext context) {
     switch (type) {
@@ -80,22 +81,21 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
   Widget build(BuildContext context) {
     final defaultTheme = Theme.of(context);
 
-    final foreground = defaultTheme.primaryIconTheme.color;
     final background = buildColor(context);
 
     final showCloseButton = this.showCloseButton ?? true;
 
-    return IconTheme(
-      data: defaultTheme.primaryIconTheme,
-      child: Material(
-        borderRadius: buildBorderRadius(context),
-        color: background,
-        elevation: elevation ?? 4.0,
-        child: Padding(
-          padding: padding ?? const EdgeInsets.all(16),
-          child: IntrinsicHeight(
-            child: Directionality(
-              textDirection: textDirection,
+    return Directionality(
+      textDirection: context.revertDirectionality(),
+      child: IconTheme(
+        data: defaultTheme.primaryIconTheme,
+        child: Material(
+          borderRadius: buildBorderRadius(context),
+          color: background,
+          elevation: elevation ?? 4.0,
+          child: Padding(
+            padding: padding ?? const EdgeInsets.all(16),
+            child: IntrinsicHeight(
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -139,7 +139,23 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
                           color: Colors.white70, width: 2.0, thickness: 2.0),
                     ),
                   ),
-                  Expanded(child: _buildContent(defaultTheme)),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          title,
+                          textAlign: context.isDirectionRTL()
+                              ? TextAlign.right
+                              : TextAlign.left,
+                          style: textStyle ??
+                              defaultTheme.textTheme.titleLarge
+                                  ?.copyWith(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -147,38 +163,5 @@ class FilledToastWidget extends StatelessWidget with BuiltInToastWidget {
         ),
       ),
     );
-  }
-
-  Widget _buildContent(ThemeData defaultTheme) {
-    final foreground = defaultTheme.primaryIconTheme.color;
-
-    Widget content = Text(
-      title,
-      textAlign: TextAlign.end,
-      style: defaultTheme.textTheme.displayLarge?.copyWith(
-        color: foreground,
-        fontSize: 18,
-      ),
-    );
-
-    if (description?.isNotEmpty ?? false) {
-      content = Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          content,
-          const SizedBox(height: 4),
-          Text(
-            description!,
-            style: defaultTheme.textTheme.displayLarge?.copyWith(
-              color: foreground,
-              fontSize: 14,
-            ),
-          )
-        ],
-      );
-    }
-
-    return content;
   }
 }

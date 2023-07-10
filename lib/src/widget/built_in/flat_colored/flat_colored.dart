@@ -5,6 +5,7 @@ class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
   const FlatColoredToastWidget({
     super.key,
     required this.type,
+    this.textStyle,
     required this.title,
     this.description,
     this.icon,
@@ -19,6 +20,9 @@ class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
 
   @override
   final ToastificationType type;
+
+  @override
+  final TextStyle? textStyle;
 
   final String title;
   final String? description;
@@ -75,52 +79,54 @@ class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
   Widget build(BuildContext context) {
     final defaultTheme = Theme.of(context);
 
-    final foreground = defaultTheme.colorScheme.outline;
     final background = buildColor(context);
 
     final showCloseButton = this.showCloseButton ?? true;
 
     final borderRadius = buildBorderRadius(context);
 
-    return IconTheme(
-      data: defaultTheme.primaryIconTheme,
-      child: Material(
-        shape: RoundedRectangleBorder(
-          borderRadius: borderRadius,
-          side: BorderSide(color: background.withOpacity(0.8), width: 1.5),
-        ),
-        color: background.withOpacity(0.5),
-        elevation: elevation ?? 0.0,
-        child: Padding(
-          padding: padding ?? const EdgeInsets.all(12),
-          child: IntrinsicHeight(
-            child: Directionality(
-              textDirection: textDirection,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Offstage(
-                    offstage: !showCloseButton,
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.only(end: 8.0),
-                      child: ClipOval(
-                        child: Material(
-                          color: Colors.transparent, // Button color
-                          child: InkWell(
-                            onTap: onCloseTap,
-                            child: const SizedBox(
-                              width: 28,
-                              height: 28,
-                              child: Padding(
-                                padding: EdgeInsets.all(4.0),
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: FittedBox(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(6.0),
-                                      child: Icon(Icons.close,
-                                          color: Colors.black),
+    return Directionality(
+      textDirection: context.revertDirectionality(),
+      child: IconTheme(
+        data: defaultTheme.primaryIconTheme,
+        child: Material(
+          shape: RoundedRectangleBorder(
+            borderRadius: borderRadius,
+            side: BorderSide(color: background.withOpacity(0.8), width: 1.5),
+          ),
+          color: background.withOpacity(0.5),
+          elevation: elevation ?? 0.0,
+          child: Padding(
+            padding: padding ?? const EdgeInsets.all(12),
+            child: IntrinsicHeight(
+              child: Directionality(
+                textDirection: textDirection,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Offstage(
+                      offstage: !showCloseButton,
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 8.0),
+                        child: ClipOval(
+                          child: Material(
+                            color: Colors.transparent, // Button color
+                            child: InkWell(
+                              onTap: onCloseTap,
+                              child: const SizedBox(
+                                width: 28,
+                                height: 28,
+                                child: Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    child: FittedBox(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(6.0),
+                                        child: Icon(Icons.close,
+                                            color: Colors.black),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -130,55 +136,38 @@ class FlatColoredToastWidget extends StatelessWidget with BuiltInToastWidget {
                         ),
                       ),
                     ),
-                  ),
-                  Offstage(
-                    offstage: !showCloseButton,
-                    child: const Padding(
-                      padding: EdgeInsetsDirectional.only(end: 16.0),
-                      child: VerticalDivider(
-                          color: Colors.white70, width: 2.0, thickness: 2.0),
+                    Offstage(
+                      offstage: !showCloseButton,
+                      child: const Padding(
+                        padding: EdgeInsetsDirectional.only(end: 16.0),
+                        child: VerticalDivider(
+                            color: Colors.white70, width: 2.0, thickness: 2.0),
+                      ),
                     ),
-                  ),
-                  Expanded(child: _buildContent(defaultTheme)),
-                ],
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            title,
+                            textAlign: context.isDirectionRTL()
+                                ? TextAlign.right
+                                : TextAlign.left,
+                            style: textStyle ??
+                                defaultTheme.textTheme.titleLarge
+                                    ?.copyWith(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
     );
-  }
-
-  Widget _buildContent(ThemeData defaultTheme) {
-    const foreground = Colors.black;
-
-    Widget content = Text(
-      title,
-      style: defaultTheme.textTheme.titleLarge?.copyWith(
-        color: foreground,
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-
-    if (description?.isNotEmpty ?? false) {
-      content = Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          content,
-          const SizedBox(height: 2),
-          Text(
-            description!,
-            style: defaultTheme.textTheme.displayLarge?.copyWith(
-              color: foreground,
-              fontSize: 12,
-            ),
-          )
-        ],
-      );
-    }
-
-    return content;
   }
 }

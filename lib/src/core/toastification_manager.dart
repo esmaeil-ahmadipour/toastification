@@ -359,4 +359,8 @@ class StyleBuilder extends StatelessWidget with BuiltInToastWidget {
   @override
   // TODO: implement type
   ToastificationType get type => throw UnimplementedError();
+
+  @override
+  // TODO: implement textStyle
+  TextStyle? get textStyle => throw UnimplementedError();
 }

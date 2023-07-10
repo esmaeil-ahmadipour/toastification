@@ -55,3 +55,21 @@ extension ThemeColorsExtensions on ThemeColors? {
     return brightness == Brightness.dark ? this?.dark : this?.light;
   }
 }
+
+extension DirectionalityExtensions on BuildContext {
+  TextDirection revertDirectionality() {
+    return Directionality.of(this).index != 0
+        ? TextDirection.rtl
+        : TextDirection.ltr;
+  }
+
+  TextDirection directionality() {
+    return Directionality.of(this).index == 0
+        ? TextDirection.rtl
+        : TextDirection.ltr;
+  }
+
+  bool isDirectionRTL() {
+    return Directionality.of(this).index == 0 ? true : false;
+  }
+}

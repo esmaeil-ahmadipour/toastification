@@ -83,21 +83,22 @@ class Toastification {
 
   final Map<Alignment, ToastificationManager> _managers = {};
   ThemeColors? _themeColors = ThemeColors(
-      light: const ColorTypes(
-          info: Colors.blue,
-          warning: Colors.amber,
-          succeed: Colors.green,
-          failure: Colors.red),
-      dark:  ColorTypes(
-          info: Colors.blue.shade900,
-          warning: Colors.amber.shade900,
-          succeed: Colors.green.shade900,
-          failure: Colors.red.shade900),);
+    light: const ColorTypes(
+        info: Colors.blue,
+        warning: Colors.amber,
+        succeed: Colors.green,
+        failure: Colors.red),
+    dark: ColorTypes(
+        info: Colors.blue.shade900,
+        warning: Colors.amber.shade900,
+        succeed: Colors.green.shade900,
+        failure: Colors.red.shade900),
+  );
 
   ThemeColors? get themeColors => _themeColors;
 
   void setThemeColors(ThemeColors value) {
-    _themeColors = value;
+  _themeColors = value;
   }
 
   /// the default configuration for the toastification
@@ -227,9 +228,9 @@ class Toastification {
     ToastificationAnimationBuilder? animationBuilder,
     ToastificationType? type,
     ToastificationStyle? style,
+    TextStyle? textStyle,
     required String title,
     Duration? animationDuration,
-    String? description,
     Widget? icon,
     Brightness? brightness,
     EdgeInsetsGeometry? padding,
@@ -254,7 +255,7 @@ class Toastification {
           type: type,
           style: style,
           title: title,
-          description: description,
+          textStyle: textStyle,
           icon: icon,
           brightness: Theme.of(ctx).brightness,
           padding: padding,

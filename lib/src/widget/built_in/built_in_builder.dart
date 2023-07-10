@@ -110,6 +110,7 @@ class BuiltInWidgetBuilder extends StatelessWidget {
     required this.item,
     this.type,
     this.style,
+    this.textStyle,
     required this.title,
     this.description,
     this.backgroundColor,
@@ -133,6 +134,8 @@ class BuiltInWidgetBuilder extends StatelessWidget {
   final ToastificationType? type;
 
   final ToastificationStyle? style;
+
+  final TextStyle? textStyle;
 
   final String title;
   final String? description;
@@ -206,9 +209,9 @@ class BuiltInWidgetBuilder extends StatelessWidget {
       case ToastificationStyle.fillColored:
         return FilledToastWidget(
           type: type,
+          textStyle: textStyle,
           textDirection: item.textDirection,
           title: title,
-          description: description,
           icon: icon,
           brightness: brightness,
           padding: padding,
@@ -221,6 +224,7 @@ class BuiltInWidgetBuilder extends StatelessWidget {
         return FlatColoredToastWidget(
           textDirection: item.textDirection,
           type: type,
+          textStyle: textStyle,
           title: title,
           description: description,
           icon: icon,
@@ -235,6 +239,7 @@ class BuiltInWidgetBuilder extends StatelessWidget {
         return FlatToastWidget(
           textDirection: item.textDirection,
           type: type,
+          textStyle: textStyle,
           title: title,
           description: description,
           icon: icon,
